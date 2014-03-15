@@ -18,7 +18,7 @@ var server = http.createServer(app).listen((1234), function(){
 
 var io = socket.listen(server);
 
-app.get('/index.html', function(req, res){
+app.get('/', function(req, res){
   res.sendfile(__dirname + '/index.html');
 });
 
