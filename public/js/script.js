@@ -63,7 +63,7 @@ function main_init() {
     var planeMesh = new THREE.Mesh(new THREE.PlaneGeometry(100, 100));
     for (i = 0; i < 10000; i++) {
         planeMesh.position.x = Math.random() * 1000 - 500;
-        planeMesh.position.y = - Math.random() * Math.random() * 200 - 15;
+        planeMesh.position.y = - Math.random() * Math.random() * 1000 - 50;
         planeMesh.position.z = i;
         planeMesh.rotation.z = Math.random() * Math.PI;
         planeMesh.scale.x = planeMesh.scale.y = Math.random() * Math.random() * 1.5 + 0.5;
@@ -93,8 +93,9 @@ function main_init() {
 }
 
 function onMousemove(event) {
-    mouseX = (event.clientX - windowHalfX) * 0.3;
-    mouseY = (event.clientY - windowHalfY) * 0.2;
+    //mouseX = (event.clientX - windowHalfX) * 0.3;
+    //mouseY = (event.clientY - windowHalfY) * 0.2;
+   
     
 }
 
