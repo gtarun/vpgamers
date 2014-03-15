@@ -1,0 +1,21 @@
+body {
+  padding: 50px;
+  font: 14px"Lucida Grande", Helvetica, Arial, sans-serif;
+}
+a {
+  color: #00B7FF;
+}
+#field {
+  width: 500px;
+  height: 500px;
+}
+.controlled {
+  background: url("../images/ball.png") no-repeat;
+  width: 280px;
+  height: 255px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /*background-color:blue;*/
+  color: #fff;
+}

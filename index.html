@@ -1,0 +1,138 @@
+<!doctype html>
+
+<head>
+  <title>Index</title>
+  <link href="stylesheets/main.css" rel="stylesheet" type="text/css" />
+  <script src="js/ThreeWebGL.js"></script>
+  <script src="js/ThreeExtras.js"></script>
+
+  <!-- <link rel="stylesheet" href="stylesheets/jquery.mobile-1.1.1.min.css" /> -->
+  <script src="js/jquery-1.7.1.min.js"></script>
+  <!-- <script src="js/jquery.mobile-1.1.1.min.js"></script> -->
+  <script src="socket.io/socket.io.js"></script>
+
+  <script>
+    var socket = new io.connect();
+    
+    socket.on('connect', function(){
+      console.log("Conection started")
+      socket.emit('init', 0);
+    
+      socket.on('message', function(message){
+        //
+      });
+    
+      socket.on('disconnect', function(){
+        //
+      });
+    
+      socket.on('newController', function(socketID){
+        //create new controlled object
+        console.log('newController : ' + socketID)
+        var el = document.createElement('div');
+        el.className = "controlled";
+        el.id = "controlled" + socketID;
+        el.innerHTML = socketID;
+        document.getElementById('field').appendChild(el);
+        console.log("created new element  " +  JSON.stringify(el));
+      });
+    
+      socket.on('update', function(message){
+        console.log("Update get : " +  message);
+        var ele = document.getElementById('controlled' + message[0]);
+        var el = "#controlled" + message[0];
+        var action = message[1];
+        if(action == 'A'){
+          var currentValue = parseInt($(el).css('left'));
+          var newValue = currentValue - 1;
+          $(el).css('left', newValue + "px");
+        }
+        else if(action == 'B'){
+          var currentValue = parseInt($(el).css('left'));
+          var newValue = currentValue + 1;
+          $(el).css('left', newValue + "px");
+        }
+    
+        //ele.innerHTML = "X: " + message[1] + "<br />Y: " + message[2] + "<br />Z: " + message[3];
+    
+        if(message[1] > 0){
+          
+          var currentValue = parseInt($(el).css('left'));
+          if(currentValue< message[1])
+          {
+            var newValue = (10 * message[1]);
+          }
+          else
+          {
+            var newValue = (10 * message[1]);
+          }
+          $(el).css('left', newValue + "%");
+          //var newValue = currentValue - (1 * message[1]);
+          
+        }
+    
+    
+        if(message[2] > 0){
+          var currentValue = parseInt($(el).css('top'));
+          //var newValue = currentValue - (1 * message[2]);
+          var newValue = (10 * message[1]);
+          $(el).css('top', newValue + "%");
+        }
+    
+        var display = document.getElementById('display');
+        display.innerHTML = "X: " + message[1].toFixed(2) + "<br />Y: " + message[2].toFixed(2) + "<br />Z: " + message[3].toFixed(2);
+      });
+    
+      socket.on('destroy', function(socketIndex){
+        if(socketIndex > 0){
+        var removeMe = document.getElementById("controlled" + socketIndex);
+        console.log(removeMe);
+        document.getElementById('field').removeChild(removeMe);
+        }
+        else{
+          console.log("socket not found!");
+        }
+      });
+    
+    });
+  </script>
+
+</head>
+
+<body>
+  <script id="vs" type="x-shader/x-vertex">
+    varying vec2 vUv;
+            void main() {
+                vUv = uv;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+            }
+  </script>
+  <script id="fs" type="x-shader/x-fragment">
+    uniform sampler2D map;
+            uniform vec3 fogColor;
+            uniform float fogNear;
+            uniform float fogFar;
+            varying vec2 vUv;
+            void main() {
+                float depth = gl_FragCoord.z / gl_FragCoord.w;
+                float fogFactor = smoothstep( fogNear, fogFar, depth );
+                gl_FragColor = texture2D( map, vUv );
+                gl_FragColor.w *= pow( gl_FragCoord.z, 20.0 );
+                gl_FragColor = mix( gl_FragColor, vec4( fogColor, gl_FragColor.w ), fogFactor );
+            }
+  </script>
+  <div class="container">
+
+    <canvas id="panel" width="10" height="1"></canvas>
+  </div>
+  <script type="text/javascript" src="js/script.js"></script>
+  <div style="position:absolute">
+    <span style="text-align:center;height:100%;width:100%"><h1>{VenturePact Hackthon}</h1></span>
+
+    <br />Message:
+    <div id='display'></div>
+    <div id='field'></div>
+  </div>
+</body>
+
+</html>
