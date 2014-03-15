@@ -29,6 +29,9 @@ app.get('/controller.html', function(req, res){
 app.get('/gyro.html', function(req, res){
   res.sendfile(__dirname + '/gyro.html');
 });
+app.get('/fly.html', function(req, res){
+  res.sendfile(__dirname + '/fly.html');
+});
 
 app.get('/cordova-2.0.0.js', function(req, res){
   res.sendfile(__dirname + '/cordova-2.0.0.js');
